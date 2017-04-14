@@ -16,7 +16,6 @@ import com.dimaska.game.Components.UsualGraphicComponent;
 import com.dimaska.game.Screens.PlayScreen;
 import com.dimaska.game.States.BumState;
 import com.dimaska.game.States.NormallState;
-import com.dimaska.game.States.OldState;
 
 import java.util.ArrayList;
 
@@ -55,7 +54,7 @@ public class World extends Subject{
         bodyComponent=new BodyComponent(0.2f,0.1f,0.2f,0.1f);
         trajectoryComponent=new TrajectoryComponent[3];
         for(int index=0;index<3;index++)
-        trajectoryComponent[index]=new TrajectoryComponent(0,GameConst.Cockroach_Speed+100*index);
+        trajectoryComponent[index]=new TrajectoryComponent(0,GameConst.Cockroach_Speed+100*index,100,350);
 
         OrthographicCamera camera=new OrthographicCamera();
         camera.setToOrtho(false,GameConst.X,GameConst.Y);
@@ -144,7 +143,7 @@ public class World extends Subject{
         }
     }
 
-    boolean OnClick(int screenX, int screenY){
+    boolean Press(int screenX, int screenY){
         int GameY=((Gdx.graphics.getHeight()-screenY)*GameConst.Y)/Gdx.graphics.getHeight();
         int GameX= (screenX*GameConst.X/Gdx.graphics.getWidth());
         Rectangle touch=new Rectangle(GameX,GameY,1,1);
@@ -152,17 +151,40 @@ public class World extends Subject{
         if(!screen.getPause()) {
             for (int i = 0; i < cockroaches.size(); i++) {
                 Cockroach copy = cockroaches.get(i);
-                if (copy.getPowerComponent().isLive()) {
+                if (copy.getPowerComponent().MayClick()) {
                     if (copy.getBody().contains(touch)) {
                         Gdx.app.log("Game", "Cockroach is touch");
-                        notify(copy,"Kill");
-                        copy.onClick();
+                        notify(copy,"Press");
+                        copy.Pressed();
                         Gdx.app.log("Game", "Score +" + 100 + ". Current account: " + scope.getScore());
                         return true;
                     }
                 }
             }
             notify(screenX,screenY,"Miss");
+        }
+        return false;
+    }
+
+    boolean Release(int screenX, int screenY){
+        int GameY=((Gdx.graphics.getHeight()-screenY)*GameConst.Y)/Gdx.graphics.getHeight();
+        int GameX= (screenX*GameConst.X/Gdx.graphics.getWidth());
+        Rectangle touch=new Rectangle(GameX,GameY,1,1);
+        Gdx.app.log("Game","X: "+GameX+" Y: "+GameY+";");
+        if(!screen.getPause()) {
+            for (int i = 0; i < cockroaches.size(); i++) {
+                Cockroach copy = cockroaches.get(i);
+                if (copy.getPowerComponent().MayClick()) {
+                    if (copy.getBody().contains(touch)) {
+                        Gdx.app.log("Game", "Cockroach is touch");
+                        notify(copy,"Release");
+                        copy.Released();
+                        //Gdx.app.log("Game", "Score +" + 100 + ". Current account: " + scope.getScore());
+                        return true;
+                    }
+                }
+            }
+            //notify(screenX,screenY,"Miss");
         }
         return false;
     }

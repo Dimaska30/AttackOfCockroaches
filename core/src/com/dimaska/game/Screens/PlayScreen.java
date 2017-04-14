@@ -1,6 +1,7 @@
 package com.dimaska.game.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dimaska.game.GameConst;
-import com.dimaska.game.Input;
+import com.dimaska.game.GameInput;
 import com.dimaska.game.MyGame;
 import com.dimaska.game.World;
 
@@ -59,8 +60,8 @@ public class PlayScreen implements Screen {
         });
 
         OrthographicCamera camera=new OrthographicCamera();
-        Input input=new Input(world);
-        InputMultiplexer multiplexer=new InputMultiplexer(UI,input);
+        GameInput gameInput =new GameInput(world,this);
+        InputMultiplexer multiplexer=new InputMultiplexer(UI, gameInput);
 
         labelCombo.setHeight(GameConst.LabelScore_Height);
         labelCombo.setWidth(GameConst.LabelScore_Width);
@@ -90,11 +91,15 @@ public class PlayScreen implements Screen {
         viewport.setCamera(camera);
         batch.setProjectionMatrix(camera.combined);
         shape.setProjectionMatrix(camera.combined);
+        Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
     public void render(float delta) {
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK) ){
+            pause=!pause;
+        }
         world.update(!pause,delta);
         labelScore.setText("Score:"+world.scope.getScore());
         labelCombo.setText("x"+world.scope.getCombo());
@@ -123,12 +128,12 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resume() {
-
+        pause=false;
     }
 
     @Override
     public void hide() {
-
+        pause=true;
     }
 
     @Override
@@ -140,6 +145,10 @@ public class PlayScreen implements Screen {
 
     public boolean getPause(){
         return pause;
+    }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
     }
 
     public MyGame getGame(){

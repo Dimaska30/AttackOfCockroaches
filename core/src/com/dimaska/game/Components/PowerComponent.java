@@ -10,5 +10,6 @@ public interface PowerComponent {
 
     void superPower();
     public void setCockroach(Cockroach cockroach);
-    public boolean isLive();
+    public boolean MayClick();
+    public String getType();
 }

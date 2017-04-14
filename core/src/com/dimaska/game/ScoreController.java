@@ -14,7 +14,7 @@ public class ScoreController implements Observer{
 
     ScoreController(MyGame game){
         score=0;
-        combo=0;
+        combo=1;
         this.game=game;
     }
 
@@ -31,7 +31,7 @@ public class ScoreController implements Observer{
     private void restartCount(){
         SaveScore();
         score=0;
-        combo=0;
+        combo=1;
     }
 
     private void SaveScore(){
@@ -48,15 +48,35 @@ public class ScoreController implements Observer{
 
     @Override
     public void onNotify(Cockroach cockroach, String event) {
-        if(event=="Kill") {
-
-            if (cockroach.getY() > GameConst.Y / 2) {
-                score += 200 * combo;
-            } else {
-                score += 100 * combo;
+        if(cockroach.getPowerComponent().getType()=="Bum"){
+            if(event=="Release") {
+                if (cockroach.getY() > GameConst.Y / 2) {
+                    score += 500 * combo;
+                } else {
+                    score += 250 * combo;
+                }
+                combo++;
             }
-            combo++;
+        }else if(cockroach.getPowerComponent().getType()=="Teleport"){
+            if(event=="Press") {
+                if (cockroach.getY() > GameConst.Y / 2) {
+                    score += 300 * combo;
+                } else {
+                    score += 200 * combo;
+                }
+                combo++;
+            }
+        }else if(cockroach.getPowerComponent().getType()=="Null"){
+            if(event=="Press") {
+                if (cockroach.getY() > GameConst.Y / 2) {
+                    score += 200 * combo;
+                } else {
+                    score += 100 * combo;
+                }
+                combo++;
+            }
         }
+
     }
 
     @Override

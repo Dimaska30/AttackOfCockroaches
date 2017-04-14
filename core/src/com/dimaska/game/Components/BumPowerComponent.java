@@ -32,11 +32,16 @@ public class BumPowerComponent implements PowerComponent {
     }
 
     @Override
-    public boolean isLive() {
+    public boolean MayClick() {
         if(cockroach.stateMachine.getCurrentState()== BumState.Live){
             return true;
         }else {
             return false;
         }
+    }
+
+    @Override
+    public String getType() {
+        return "Bum";
     }
 }

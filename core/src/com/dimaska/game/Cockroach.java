@@ -9,11 +9,6 @@ import com.dimaska.game.Components.BodyComponent;
 import com.dimaska.game.Components.GraphicComponent;
 import com.dimaska.game.Components.PowerComponent;
 import com.dimaska.game.Components.TrajectoryComponent;
-import com.dimaska.game.Components.UsualGraphicComponent;
-import com.dimaska.game.States.NormallState;
-import com.dimaska.game.States.OldState;
-
-import static com.dimaska.game.States.OldState.Live;
 
 /**
  * Created by dimaska on 08.02.17.
@@ -64,9 +59,21 @@ public class Cockroach {
         graphicComponent.draw(x,y,width,height,sprite);
     }
 
-    public void onClick(){
+    /*public void onClick(){
         Telegram telegram=new Telegram();
         telegram.message=1;
+        stateMachine.getCurrentState().onMessage(this,telegram);
+    }*/
+
+    public void Pressed(){
+        Telegram telegram=new Telegram();
+        telegram.message=1;
+        stateMachine.getCurrentState().onMessage(this,telegram);
+    }
+
+    public void Released(){
+        Telegram telegram=new Telegram();
+        telegram.message=2;
         stateMachine.getCurrentState().onMessage(this,telegram);
     }
 

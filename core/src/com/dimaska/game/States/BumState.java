@@ -13,6 +13,7 @@ public enum BumState implements State<Cockroach> {
     Live(){
         @Override
         public void update(Cockroach entity) {
+            entity.getTrajectoryComponent().update(entity.getTempDeltaTime(),entity.getX());
             entity.setX(entity.getTrajectoryComponent().getX(entity.getTempDeltaTime(),entity.getX()));
             entity.setY(entity.getTrajectoryComponent().getY(entity.getTempDeltaTime(),entity.getY()));
         }

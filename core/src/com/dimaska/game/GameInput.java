@@ -1,18 +1,21 @@
 package com.dimaska.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.Input;
+import com.dimaska.game.Screens.PlayScreen;
 
 /**
  * Created by dimaska on 08.02.17.
  */
 
-public class Input implements InputProcessor {
+public class GameInput implements InputProcessor {
 
     private World world;
+    private PlayScreen screen;
 
-    public Input(World screen){
-        this.world=screen;
+    public GameInput(World world,PlayScreen screen){
+        this.world=world;
+        this.screen=screen;
     }
 
     @Override
@@ -32,13 +35,14 @@ public class Input implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Gdx.app.log("Touch","X: "+screenX+" Y: "+screenY+";");
-        return world.OnClick(screenX,screenY);
+        Gdx.app.log("Press","X: "+screenX+" Y: "+screenY+";");
+        return world.Press(screenX,screenY);
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+        Gdx.app.log("Release","X: "+screenX+" Y: "+screenY+";");
+        return world.Release(screenX,screenY);
     }
 
     @Override
