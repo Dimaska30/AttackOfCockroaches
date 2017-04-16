@@ -29,21 +29,30 @@ public class PlayScreen implements Screen {
     private Label labelScore;
     private Label labelCombo;
     private Label labelPause;
+    private Label labelWave;
+    private Label labelLvl;
+    private float currentTimeForLabel;
     private SpriteBatch batch;
     private ShapeRenderer shape;
+    private int lvl;
 
     private Stage UI;
     private boolean pause;
 
     PlayScreen(MyGame game){
         this.game=game;
+        currentTimeForLabel = 0;
         world=new World(this);
         labelScore=new Label("",game.skin);
         labelCombo=new Label("",game.skin);
         labelPause=new Label("Pause",game.skin);
+        labelLvl = new Label("New Level!", game.skin);
+        labelWave = new Label("New Wave!", game.skin);
         batch=new SpriteBatch();
         shape=new ShapeRenderer();
         UI=new Stage();
+        lvl = game.user.getInteger("lastLvl");
+
     }
 
     @Override
@@ -153,5 +162,13 @@ public class PlayScreen implements Screen {
 
     public MyGame getGame(){
         return game;
+    }
+
+    public void nextLevel() {
+
+    }
+
+    public void restartLevel() {
+
     }
 }

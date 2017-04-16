@@ -34,5 +34,6 @@ public class MyGame extends Game {
             user.putInteger("Score"+i,0);
         }
         user.putBoolean("isFirst",false);
+        user.putInteger("lastLvl", 1);
     }
 }

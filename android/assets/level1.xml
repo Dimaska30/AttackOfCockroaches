@@ -1,0 +1,7 @@
+<level number="1" type="game">
+    <wave number="1" maxNormal="1" maxTeleport="1" maxBum="1"></wave>
+    <wave number="2" maxNormal="5" maxTeleport="5" maxBum="5"></wave>
+    <wave number="3" maxNormal="10" maxTeleport="10" maxBum="10"></wave>
+    <wave number="4" maxNormal="20" maxTeleport="20" maxBum="20"></wave>
+    <wave number="5" maxNormal="30" maxTeleport="30" maxBum="30"></wave>
+</level>

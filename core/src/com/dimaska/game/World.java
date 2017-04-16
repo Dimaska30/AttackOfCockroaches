@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.XmlReader;
 import com.dimaska.game.Components.BodyComponent;
 import com.dimaska.game.Components.BumGrapicComponent;
 import com.dimaska.game.Components.BumPowerComponent;
@@ -36,6 +37,9 @@ public class World extends Subject{
     private BodyComponent bodyComponent;
     private TrajectoryComponent[] trajectoryComponent;
     private PlayScreen screen;
+    private int[][] waves;
+    private int currentWave;
+
 
     public World(PlayScreen screen){
         this.screen=screen;
@@ -193,6 +197,14 @@ public class World extends Subject{
         background.dispose();
         batch.dispose();
         deleteObject();
+    }
+
+    public void restartLvl(XmlReader.Element lvl) {
+
+    }
+
+    public void setLvl(XmlReader.Element lvl) {
+
     }
 
     /*
