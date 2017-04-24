@@ -41,5 +41,6 @@ public class UsualGraphicComponent implements GraphicComponent {
     public void dispose(){
         live.dispose();
         crashed.dispose();
+        temp = null;
     }
 }

@@ -9,7 +9,7 @@ import javax.swing.plaf.basic.BasicDirectoryModel;
  */
 
 public class BodyComponent {
-    float paddingTop,paddingBottom,paddingLeft,paddingRight;
+    private float paddingTop, paddingBottom, paddingLeft, paddingRight;
 
     public BodyComponent(float pB, float pT, float pL, float pR){
         paddingBottom=pB;

@@ -13,9 +13,9 @@ import com.dimaska.game.States.BumState;
 
 public class BumGrapicComponent implements GraphicComponent {
 
-    Texture texture;
-    Texture bum;
-    Cockroach temp;
+    private Texture texture;
+    private Texture bum;
+    private Cockroach temp;
 
     public BumGrapicComponent(Texture texture,Texture bum){
         this.texture=texture;
@@ -40,5 +40,7 @@ public class BumGrapicComponent implements GraphicComponent {
     @Override
     public void dispose() {
         texture.dispose();
+        bum.dispose();
+        temp = null;
     }
 }

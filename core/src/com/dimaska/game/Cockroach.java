@@ -59,19 +59,13 @@ public class Cockroach {
         graphicComponent.draw(x,y,width,height,sprite);
     }
 
-    /*public void onClick(){
-        Telegram telegram=new Telegram();
-        telegram.message=1;
-        stateMachine.getCurrentState().onMessage(this,telegram);
-    }*/
-
-    public void Pressed(){
+    void Pressed() {
         Telegram telegram=new Telegram();
         telegram.message=1;
         stateMachine.getCurrentState().onMessage(this,telegram);
     }
 
-    public void Released(){
+    void Released() {
         Telegram telegram=new Telegram();
         telegram.message=2;
         stateMachine.getCurrentState().onMessage(this,telegram);
@@ -89,43 +83,14 @@ public class Cockroach {
         this.alpha = alpha;
     }
 
-    public void incrementAlpha(){
-        alpha++;
-    }
-
     public void dicrementAlpha(){alpha--;}
-
-
-    public GraphicComponent getGraphicComponent() {
-        return graphicComponent;
-    }
-
-    public void setGraphicComponent(GraphicComponent graphicComponent) {
-        this.graphicComponent = graphicComponent;
-    }
-
-    public BodyComponent getBodyComponent() {
-        return bodyComponent;
-    }
-
-    public void setBodyComponent(BodyComponent bodyComponent) {
-        this.bodyComponent = bodyComponent;
-    }
 
     public PowerComponent getPowerComponent() {
         return powerComponent;
     }
 
-    public void setPowerComponent(PowerComponent powerComponent) {
-        this.powerComponent = powerComponent;
-    }
-
     public TrajectoryComponent getTrajectoryComponent() {
         return trajectoryComponent;
-    }
-
-    public void setTrajectoryComponent(TrajectoryComponent trajectoryComponent) {
-        this.trajectoryComponent = trajectoryComponent;
     }
 
     public float getX() {
@@ -161,9 +126,7 @@ public class Cockroach {
     }
 
     public void dispose(){
-        graphicComponent=null;
         trajectoryComponent=null;
         powerComponent=null;
-        bodyComponent=null;
     }
 }

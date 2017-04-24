@@ -17,7 +17,6 @@ public enum NormallState implements State<Cockroach> {
             entity.getTrajectoryComponent().update(entity.getTempDeltaTime(),entity.getX());
             entity.setX(entity.getTrajectoryComponent().getX(entity.getTempDeltaTime(),entity.getX()));
             entity.setY(entity.getTrajectoryComponent().getY(entity.getTempDeltaTime(),entity.getY()));
-            //entity.getPowerComponent().setCockroach(entity);
             entity.getPowerComponent().superPower();
         }
     },

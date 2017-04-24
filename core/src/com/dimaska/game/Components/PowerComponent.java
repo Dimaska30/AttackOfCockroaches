@@ -9,7 +9,10 @@ import com.dimaska.game.Cockroach;
 public interface PowerComponent {
 
     void superPower();
-    public void setCockroach(Cockroach cockroach);
-    public boolean MayClick();
-    public String getType();
+
+    void setCockroach(Cockroach cockroach);
+
+    boolean MayClick();
+
+    String getType();
 }

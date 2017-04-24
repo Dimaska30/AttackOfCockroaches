@@ -36,11 +36,7 @@ public class TeleportPowerComponent implements PowerComponent {
 
     @Override
     public boolean MayClick() {
-        if(cockroach.stateMachine.getCurrentState()== NormallState.Live){
-            return true;
-        }else{
-            return false;
-        }
+        return cockroach.stateMachine.getCurrentState() == NormallState.Live;
     }
 
     @Override

@@ -8,6 +8,7 @@ public class GameConst {
 
     public static final int X=(int)(500*1.5);
     public static final int Y=(int)(1000*1.5);
+    public static final int MaxTimeForNotification = 5;//in seconds
     public static final int Cockroach_Width=100;
     public static final int Cockroach_Height=150;
     public static final int BumCockroach_Width=200;

@@ -26,8 +26,6 @@ public class ScoreController implements Observer{
         return combo;
     }
 
-    //void addPoints(int points){score+=points;}
-
     private void restartCount(){
         SaveScore();
         score=0;
@@ -48,8 +46,8 @@ public class ScoreController implements Observer{
 
     @Override
     public void onNotify(Cockroach cockroach, String event) {
-        if(cockroach.getPowerComponent().getType()=="Bum"){
-            if(event=="Release") {
+        if (cockroach.getPowerComponent().getType().equals("Bum")) {
+            if (event.equals("Release")) {
                 if (cockroach.getY() > GameConst.Y / 2) {
                     score += 500 * combo;
                 } else {
@@ -57,8 +55,8 @@ public class ScoreController implements Observer{
                 }
                 combo++;
             }
-        }else if(cockroach.getPowerComponent().getType()=="Teleport"){
-            if(event=="Press") {
+        } else if (cockroach.getPowerComponent().getType().equals("Teleport")) {
+            if (event.equals("Press")) {
                 if (cockroach.getY() > GameConst.Y / 2) {
                     score += 300 * combo;
                 } else {
@@ -66,8 +64,8 @@ public class ScoreController implements Observer{
                 }
                 combo++;
             }
-        }else if(cockroach.getPowerComponent().getType()=="Null"){
-            if(event=="Press") {
+        } else if (cockroach.getPowerComponent().getType().equals("Null")) {
+            if (event.equals("Press")) {
                 if (cockroach.getY() > GameConst.Y / 2) {
                     score += 200 * combo;
                 } else {
@@ -81,10 +79,13 @@ public class ScoreController implements Observer{
 
     @Override
     public void onNotify(float x, float y, String event) {
-        if(event=="Miss"){
+        if (event.equals("Miss")) {
             combo=1;
         }
-        if(event=="Lose"){
+        if (event.equals("Lose")) {
+            restartCount();
+        }
+        if (event.equals("Win")) {
             restartCount();
         }
     }

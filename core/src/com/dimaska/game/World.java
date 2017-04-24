@@ -1,5 +1,6 @@
 package com.dimaska.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,6 +19,7 @@ import com.dimaska.game.Screens.PlayScreen;
 import com.dimaska.game.States.BumState;
 import com.dimaska.game.States.NormallState;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.dimaska.game.States.NormallState.Live;
@@ -35,10 +37,10 @@ public class World extends Subject{
     private UsualGraphicComponent graphicComponent;
     private BumGrapicComponent bumGrapicComponent;
     private BodyComponent bodyComponent;
-    private TrajectoryComponent[] trajectoryComponent;
     private PlayScreen screen;
     private int[][] waves;
     private int currentWave;
+    private XmlReader.Element lvl;
 
 
     public World(PlayScreen screen){
@@ -56,23 +58,24 @@ public class World extends Subject{
         graphicComponent=new UsualGraphicComponent(live,crash);
 
         bodyComponent=new BodyComponent(0.2f,0.1f,0.2f,0.1f);
-        trajectoryComponent=new TrajectoryComponent[3];
-        for(int index=0;index<3;index++)
-        trajectoryComponent[index]=new TrajectoryComponent(0,GameConst.Cockroach_Speed+100*index,100,350);
 
         OrthographicCamera camera=new OrthographicCamera();
         camera.setToOrtho(false,GameConst.X,GameConst.Y);
         batch.setProjectionMatrix(camera.combined);
         addObserver(scope);
+        addObserver(screen);
+
+        currentWave = 0;
     }
 
     public void update(boolean isLogic,float delta){
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        if (cockroaches.isEmpty()) {
+            nextWave();
+        }
         if(isLogic){
             isLose();
-            onCreateRandomCockroach();
         }
         batch.begin();
         batch.draw(background,0,0,GameConst.X,GameConst.Y);
@@ -92,57 +95,13 @@ public class World extends Subject{
         batch.end();
     }
 
-
-    private void onCreateRandomCockroach(){
-        if(Math.random()<GameConst.Cockroach_CreateChance){
-            float powerChange=(float)(Math.random()*2);
-            Cockroach temp;
-            if(powerChange<=0.2){
-                BumState state=BumState.Live;
-                temp = new Cockroach((float) (Math.random() * (GameConst.X - GameConst.Cockroach_Width)),
-                        GameConst.Y + GameConst.Cockroach_Height,
-                        GameConst.BumCockroach_Width,
-                        GameConst.BumCockroach_Height,
-                        bumGrapicComponent,
-                        bodyComponent,
-                        new BumPowerComponent(),
-                        trajectoryComponent[(int) (Math.random() * 3)],
-                        state);
-            }else if(powerChange<=1) {
-                NormallState state=Live;
-                temp = new Cockroach((float) (Math.random() * (GameConst.X - GameConst.Cockroach_Width)),
-                        GameConst.Y + GameConst.Cockroach_Height,
-                        GameConst.Cockroach_Width,
-                        GameConst.Cockroach_Height,
-                        graphicComponent,
-                        bodyComponent,
-                        new TeleportPowerComponent(2),
-                        trajectoryComponent[(int) (Math.random() * 3)],
-                        state);
-            }else{
-                NormallState state=Live;
-                temp = new Cockroach((float) (Math.random() * (GameConst.X - GameConst.Cockroach_Width)),
-                        GameConst.Y + GameConst.Cockroach_Height,
-                        GameConst.Cockroach_Width,
-                        GameConst.Cockroach_Height,
-                        graphicComponent,
-                        bodyComponent,
-                        new NullPowerComponent(),
-                        trajectoryComponent[(int) (Math.random() * 3)],
-                        state);
-            }
-            temp.powerComponent.setCockroach(temp);
-            cockroaches.add(temp);
-        }
-    }
-
     private void isLose() {
         for (int index = 0; index < cockroaches.size(); index++) {
             Cockroach temp = cockroaches.get(index);
-            if(temp.getY()+temp.getHeight()*0.8<=0){
-                //Событие проигрыша
-                notify(0,0,"Lose");
+            if (temp.getY() + temp.getHeight() * 0.8 <= 0) {//Событие проигрыша
                 cockroaches.clear();
+                notify(0, 0, "Lose");
+
             }
         }
     }
@@ -181,14 +140,12 @@ public class World extends Subject{
                 if (copy.getPowerComponent().MayClick()) {
                     if (copy.getBody().contains(touch)) {
                         Gdx.app.log("Game", "Cockroach is touch");
-                        notify(copy,"Release");
                         copy.Released();
-                        //Gdx.app.log("Game", "Score +" + 100 + ". Current account: " + scope.getScore());
+                        notify(copy, "Release");
                         return true;
                     }
                 }
             }
-            //notify(screenX,screenY,"Miss");
         }
         return false;
     }
@@ -200,20 +157,97 @@ public class World extends Subject{
     }
 
     public void restartLvl(XmlReader.Element lvl) {
-
+        setLvl(lvl);
     }
 
     public void setLvl(XmlReader.Element lvl) {
-
+        this.lvl = lvl;
+        waves = new int[lvl.getChildCount()][3];
+        cockroaches.clear();
+        currentWave = 0;
+        CreateArray();
     }
 
-    /*
-    public boolean isSlime() {
-        return isSlime;
+    private void nextWave() {
+        if (currentWave + 1 > waves.length) {
+            notify(0, 0, "Win");
+        }
+        currentWave++;
+        CreateArray();
+        notify(0, 0, "NewWave");
     }
 
-    public void setSlime(boolean slime) {
-        isSlime = slime;
+    private void CreateArray() {
+        com.badlogic.gdx.utils.Array<XmlReader.Element> wave = lvl.getChildrenByName("wave");
+        com.badlogic.gdx.utils.Array<XmlReader.Element> tempCockroach = wave.get(currentWave).getChildrenByName("cockroach");
+        for (int numberCockroach = 0; numberCockroach < wave.get(currentWave).getChildCount(); numberCockroach++) {
+            XmlReader.Element temp = tempCockroach.get(numberCockroach);
+            Cockroach cockroach = readFromFile(temp);
+            cockroach.getPowerComponent().setCockroach(cockroach);
+            cockroaches.add(cockroach);
+
+        }
     }
-    */
+
+    private Cockroach readFromFile(XmlReader.Element cockroach) {
+        String type = cockroach.getAttribute("type");
+        if (type.equals("bum")) {
+            TrajectoryComponent component = new TrajectoryComponent(
+                    cockroach.getFloatAttribute("vx"),
+                    cockroach.getFloatAttribute("vy"),
+                    cockroach.getFloatAttribute("maxVx"),
+                    cockroach.getFloatAttribute("maxVy"),
+                    cockroach.getFloatAttribute("ax"),
+                    cockroach.getFloatAttribute("ay")
+            );
+            return new Cockroach(cockroach.getFloatAttribute("x"),
+                    cockroach.getFloatAttribute("y"),
+                    GameConst.BumCockroach_Width,
+                    GameConst.BumCockroach_Height,
+                    bumGrapicComponent,
+                    bodyComponent,
+                    new BumPowerComponent(),
+                    component,
+                    BumState.Live
+            );
+        } else if (type.equals("teleport")) {
+            TrajectoryComponent component = new TrajectoryComponent(
+                    cockroach.getFloatAttribute("vx"),
+                    cockroach.getFloatAttribute("vy"),
+                    cockroach.getFloatAttribute("maxVx"),
+                    cockroach.getFloatAttribute("maxVy"),
+                    cockroach.getFloatAttribute("ax"),
+                    cockroach.getFloatAttribute("ay")
+            );
+            return new Cockroach(cockroach.getFloatAttribute("x"),
+                    cockroach.getFloatAttribute("y"),
+                    GameConst.Cockroach_Width,
+                    GameConst.Cockroach_Height,
+                    graphicComponent,
+                    bodyComponent,
+                    new TeleportPowerComponent(cockroach.getIntAttribute("points")),
+                    component,
+                    NormallState.Live
+            );
+        } else {
+            TrajectoryComponent component = new TrajectoryComponent(
+                    cockroach.getFloatAttribute("vx"),
+                    cockroach.getFloatAttribute("vy"),
+                    cockroach.getFloatAttribute("maxVx"),
+                    cockroach.getFloatAttribute("maxVy"),
+                    cockroach.getFloatAttribute("ax"),
+                    cockroach.getFloatAttribute("ay")
+            );
+            return new Cockroach(cockroach.getFloatAttribute("x"),
+                    cockroach.getFloatAttribute("y"),
+                    GameConst.Cockroach_Width,
+                    GameConst.Cockroach_Height,
+                    graphicComponent,
+                    bodyComponent,
+                    new NullPowerComponent(),
+                    component,
+                    NormallState.Live
+            );
+        }
+    }
 }

@@ -8,7 +8,7 @@ import com.dimaska.game.States.NormallState;
  */
 
 public class NullPowerComponent implements PowerComponent {
-    Cockroach cockroach;
+    private Cockroach cockroach;
     @Override
     public void superPower() {
 
@@ -21,11 +21,7 @@ public class NullPowerComponent implements PowerComponent {
 
     @Override
     public boolean MayClick() {
-        if(cockroach.stateMachine.getCurrentState()== NormallState.Live){
-            return true;
-        }else{
-            return false;
-        }
+        return cockroach.stateMachine.getCurrentState() == NormallState.Live;
     }
 
     @Override

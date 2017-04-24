@@ -14,17 +14,17 @@ public class TrajectoryComponent {
     private float maxVx,maxVy;
 
 
-    public TrajectoryComponent(float vx, float vy,float maxVx,float maxVy){
+    public TrajectoryComponent(float vx, float vy, float maxVx, float maxVy, float ax, float ay) {
         this.vx=vx;
         this.vy=vy;
-        this.ax=(float)(Math.random()*20 -10);
-        this.ay=-(float)(Math.random()*10+10);
+        this.ax = ax;
+        this.ay = ay;
         this.maxVx=maxVx;
         this.maxVy=maxVy;
     }
 
     public void update(float deltaTime,float x){
-        if(vx<maxVx) {
+        if (Math.abs(vx) < maxVx) {
             vx += ax *deltaTime;
         }else{
             vx=maxVx;

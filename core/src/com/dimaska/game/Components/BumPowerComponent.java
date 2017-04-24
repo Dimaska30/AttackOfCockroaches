@@ -9,21 +9,12 @@ import com.dimaska.game.World;
  */
 
 public class BumPowerComponent implements PowerComponent {
-    //private World world;
-    private Cockroach cockroach;
 
-    /*public BumPowerComponent(World world){
-        this.world=world;
-    }*/
+    private Cockroach cockroach;
 
     @Override
     public void superPower() {
-        if(cockroach.getAlpha()>0){
-            //world.setSlime(true);
 
-        }else{
-            //world.setSlime(false);
-        }
     }
 
     @Override
@@ -33,11 +24,7 @@ public class BumPowerComponent implements PowerComponent {
 
     @Override
     public boolean MayClick() {
-        if(cockroach.stateMachine.getCurrentState()== BumState.Live){
-            return true;
-        }else {
-            return false;
-        }
+        return cockroach.stateMachine.getCurrentState() == BumState.Live;
     }
 
     @Override

@@ -9,29 +9,24 @@ import java.util.ArrayList;
  */
 
 public abstract class Subject {
-    public Array<Observer> observers=new Array<Observer>();
+    private Array<Observer> observers = new Array<Observer>();
 
-    public void addObserver(Observer observer){
+    void addObserver(Observer observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(Observer observer){
-        int index=observers.indexOf(observer,true);
-        observers.removeIndex(index);
-    }
-
-    public void deleteObject(){
+    void deleteObject() {
         observers.clear();
         observers=null;
     }
 
-    public void notify(Cockroach cockroach,String event){
+    void notify(Cockroach cockroach, String event) {
         for(int index=0;index<observers.size;index++){
             observers.get(index).onNotify(cockroach,event);
         }
     }
 
-    public void notify(float x,float y,String event){
+    void notify(float x, float y, String event) {
         for(int index=0;index<observers.size;index++){
             observers.get(index).onNotify(x,y,event);
         }
